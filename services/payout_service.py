@@ -45,5 +45,3 @@ class PayoutService:
         response = requests.get(url, auth=self.auth)
 
         return response.json()
-
-    # def withdraw_ewallet():

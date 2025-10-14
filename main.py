@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routes import payout, recommendations, payments
+from routes import payout, recommendations, payments, refund
 
 app = FastAPI()
 
@@ -16,6 +16,7 @@ app.add_middleware(
 app.include_router(payout.router)
 app.include_router(recommendations.router)
 app.include_router(payments.router)
+app.include_router(refund.router)
 
 @app.get("/")
 async def root():

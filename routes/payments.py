@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
-from models.schemas import SupplierCredential
+from models.schemas import EventCredential
 from dependencies import get_payment_service
 from services.payment_service import PaymentService
 
@@ -8,7 +8,7 @@ router = APIRouter(prefix="/api/v1")
 
 @router.post("/create-checkout-session")
 async def pay_supplier(
-    data: SupplierCredential, service: PaymentService = Depends(get_payment_service)
+    data: EventCredential, service: PaymentService = Depends(get_payment_service)
 ):
     try:
         invoice = service.create_invoice(data)

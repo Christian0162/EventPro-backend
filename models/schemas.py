@@ -14,7 +14,7 @@ class RecommendRequest(BaseModel):
     suppliers: List[Supplier]
 
 
-class SupplierCredential(BaseModel):
+class EventCredential(BaseModel):
     external_id: str
     net_amount: float
     payer_email: str
@@ -28,6 +28,20 @@ class InvoiceResponse(BaseModel):
 
 class StatusResponse(BaseModel):
     status: str
+
+
+class RefundCredential(BaseModel):
+    invoice_id: str
+    amount: float
+    reference_id: str
+
+
+class RefundRequest(BaseModel):
+    refund: List[RefundCredential]
+
+
+class RefundStatusRequest(BaseModel):
+    refund_ids: List[str]
 
 
 class PayoutCredential(BaseModel):

@@ -1,5 +1,5 @@
 from xendit import Xendit
-from models.schemas import SupplierCredential
+from models.schemas import EventCredential
 import os
 from dotenv import load_dotenv
 
@@ -13,7 +13,7 @@ class PaymentService:
             raise RuntimeError("Missing XENDIT_SECRET_KEY in environment")
         self.xendit = Xendit(api_key=api_key)
 
-    def create_invoice(self, credential: SupplierCredential):
+    def create_invoice(self, credential: EventCredential):
         return self.xendit.Invoice.create(
             external_id=credential.external_id,
             payer_email=credential.payer_email,
