@@ -7,7 +7,7 @@ app = FastAPI()
 # CORS Configuration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=["http://localhost:5173", "https://unite-eventpro.netlify.app"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -17,6 +17,7 @@ app.include_router(payout.router)
 app.include_router(recommendations.router)
 app.include_router(payments.router)
 app.include_router(refund.router)
+
 
 @app.get("/")
 async def root():
