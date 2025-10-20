@@ -6,8 +6,9 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+
 class GeminiService:
-    
+
     def __init__(self):
         api_key = os.getenv("GEMINI_API_KEY")
         if not api_key:
@@ -33,7 +34,7 @@ class GeminiService:
             suppliers with a short explanation for each.
 
             the following format must be like this:
-            1: "Supplier name", Details
+            1: "Supplier name", Details and just say supplier profiles
             """.strip()
         response = self.model.generate_content(prompt)
         return response.text
