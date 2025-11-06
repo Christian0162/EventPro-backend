@@ -5,7 +5,9 @@ const crypto = require("crypto");
 const axios = require("axios");
 const cors = require('cors')
 const admin = require('firebase-admin')
-const serviceAccount = require('./serviceAccountKey.json')
+require('dotenv').config();
+
+const serviceAccount = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON);
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount)

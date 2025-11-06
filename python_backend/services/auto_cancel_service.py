@@ -1,14 +1,17 @@
 from google.cloud import firestore
 from datetime import datetime, timezone
+import json
 import os
+from dotenv import load_dotenv
 
+load_dotenv()
 
 class AutoCancelService:
 
     def __init__(self):
-        os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "serviceAccountKey.json"
-        self.db = firestore.Client()
-
+        service_account_info = json.loads(os.environ["GOOGLE_APPLICATION_CREDENTIALS_JSON"])
+        self.db = firestore.Client.from_service_account_info(service_account_info)
+        
     def safe_parse_date(self, date_str):
         """Safely parse YYYY-MM-DD date strings."""
         try:
