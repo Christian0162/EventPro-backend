@@ -101,11 +101,11 @@ class AutoCancelService:
             active_applications = [
                 a
                 for a in applications
-                if a.to_dict().get("status") not in ["Cancelled", "Rejected"]
+                if a.to_dict().get("status") not in ["Approved", "Pending"]
             ]
 
             # Delete event if no active contracts AND no active applications
-            if not active_contracts and not active_applications:
+            if not active_contracts or not active_applications:
                 print(f"🗑 Deleting expired event {event_id} ({event_name})")
                 planner_id = event.get("user_id") or event.get("planner_id")
                 if planner_id:
