@@ -13,16 +13,10 @@ class GeminiService:
         api_key = os.getenv("GEMINI_API_KEY")
         if not api_key:
             raise RuntimeError("Missing GEMINI_API_KEY in environment")
-        genai.configure(
-            api_key=api_key,
-            client_options={
-                "api_endpoint": "https://us-central1-aiplatform.googleapis.com"
-            },
-        )
-
+        genai.configure(api_key=api_key)
         self.model = genai.GenerativeModel("gemini-2.0-flash")
 
-    def get_recommendations(self, user_prompt: str, suppliers: List[Supplier]) -> str:
+    def get_recommendations(self, user_prompt: str, suppliers: List[Supplier]) -> dict:
         suppliers_text = "\n".join(
             f"{s.name} ({s.category}): {s.avg_rating}/5 – {s.reviews}"
             for s in suppliers
