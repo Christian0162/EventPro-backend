@@ -16,7 +16,15 @@ const db = admin.firestore()
 dotenv.config();
 
 const app = express();
-app.use(cors())
+
+const corsOptions = {
+    origin: ["http://localhost:5173", "https://unite-eventpro.netlify.app"], // allow your frontend
+    methods: ["*"], // allow all needed methods
+    allowedHeaders: ["*"], // your custom headers
+};
+
+app.use(cors(corsOptions))
+
 app.use(express.json());
 
 const apiKey = process.env.LALAMOVE_API_KEY;
