@@ -7,7 +7,11 @@ app = FastAPI()
 # CORS Configuration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "https://unite-eventpro.netlify.app"],
+    allow_origins=[
+        "http://localhost:5173",
+        "https://unite-eventpro.netlify.app",
+        "https://unite-eventpro.site",
+    ],
     allow_methods=["*"],
     allow_headers=["*"],
 )
