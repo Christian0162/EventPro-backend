@@ -20,7 +20,7 @@ dotenv.config();
 const app = express();
 
 const corsOptions = {
-    origin: ["http://localhost:5173", "https://unite-eventpro.netlify.app"], // allow your frontend
+    origin: ["http://localhost:5173", "https://unite-eventpro.netlify.app", "https://unite-eventpro.site"], // allow your frontend
     methods: ["*"], // allow all needed methods
     allowedHeaders: ["*"], // your custom headers
 };
@@ -249,7 +249,7 @@ app.post("/lalamove-webhook", async (req, res) => {
             await db.collection("notifications").add({
                 avatar: "D",
                 message: `A driver has been assigned for your delivery (Order ID: ${orderId}).`,
-                createdAt: admin.firestore.FieldValue.serverTimestamp(),
+                created_at: admin.firestore.FieldValue.serverTimestamp(),
                 referenced_type: "contract",
                 referenced_id: contractData?.id || null,
                 title: "Driver Assigned",
@@ -266,6 +266,7 @@ app.post("/lalamove-webhook", async (req, res) => {
                 referenced_type: "contract",
                 sender_id: eventData?.id || null,
                 referenced_id: contractData?.id || null,
+                created_at: admin.firestore.FieldValue.serverTimestamp(),
                 title: "Driver Delivered",
                 unread: true,
                 receiver_id: supplier_id || null,
