@@ -6,12 +6,15 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+
 class AutoCancelService:
 
     def __init__(self):
-        service_account_info = json.loads(os.environ["GOOGLE_APPLICATION_CREDENTIALS_JSON"])
+        service_account_info = json.loads(
+            os.environ["GOOGLE_APPLICATION_CREDENTIALS_JSON"]
+        )
         self.db = firestore.Client.from_service_account_info(service_account_info)
-        
+
     def safe_parse_date(self, date_str):
         """Safely parse YYYY-MM-DD date strings."""
         try:
@@ -36,7 +39,7 @@ class AutoCancelService:
             "referenced_id": contract_id,
             "referenced_type": "contract",
             "unread": True,
-            "createdAt": datetime.now(timezone.utc),
+            "created_at": datetime.now(timezone.utc),
         }
 
         self.db.collection("notifications").add(notification_data)
@@ -56,7 +59,7 @@ class AutoCancelService:
             "message": message,
             "receiver_id": receiver_id,
             "unread": True,
-            "createdAt": datetime.now(timezone.utc),
+            "created_at": datetime.now(timezone.utc),
         }
 
         self.db.collection("notifications").add(notification_data)
