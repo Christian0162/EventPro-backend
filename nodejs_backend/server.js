@@ -275,7 +275,7 @@ app.post("/lalamove-webhook", async (req, res) => {
             await db.collection("notifications").add({
                 avatar: "D",
                 message: `The delivery has arrived and is now on-site. Please check your records for Contract ID: "${contractData?.id}".`,
-                createdAt: admin.firestore.FieldValue.serverTimestamp(),
+                created_at: admin.firestore.FieldValue.serverTimestamp(),
                 referenced_type: "contract",
                 sender_id: eventData?.id || null,
                 referenced_id: contractData?.id || null,
