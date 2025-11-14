@@ -82,7 +82,7 @@ def auto_delete_expired_events(self):
 
         event_date = self.safe_parse_date(event_date_str)
 
-        # Skip invalid or future events
+        # Skip invalid or future eventss
         if not event_date or event_date >= now:
             continue
 
