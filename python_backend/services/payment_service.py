@@ -21,9 +21,9 @@ class PaymentService:
             amount=credential.net_amount,
             currency="PHP",
             invoice_duration=30,
-            success_redirect_url="http://localhost:5173/payment/success?id="
+            success_redirect_url="https://unite-eventpro.site/payment/success?id="
             + credential.external_id,
-            failure_redirect_url="http://localhost:5173/failed_payment",
+            failure_redirect_url="https://unite-eventpro.site/failed_payment",
             payment_methods=[credential.payment_method],
         )
 
