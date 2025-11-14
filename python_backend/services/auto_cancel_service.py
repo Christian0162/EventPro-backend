@@ -65,60 +65,54 @@ class AutoCancelService:
         self.db.collection("notifications").add(notification_data)
         print(f"📩 Event notification sent to {role}: {receiver_id}")
 
-    def auto_delete_expired_events(self):
-        """Delete past events that have no active contracts or applications."""
-        print(
-            f"[{datetime.now()}] Checking for expired events with no active contracts or applications..."
+
+def auto_delete_expired_events(self):
+    """Delete past events that have NO contracts and NO applications."""
+    print(
+        f"[{datetime.now()}] Checking for expired events with no contracts or applications..."
+    )
+    events_ref = self.db.collection("events").stream()
+    now = datetime.now()
+
+    for event_doc in events_ref:
+        event = event_doc.to_dict()
+        event_id = event_doc.id
+        event_name = event.get("event_name", "Untitled Event")
+        event_date_str = event.get("event_date", {}).get("date_value")
+
+        event_date = self.safe_parse_date(event_date_str)
+
+        # Skip invalid or future eventss
+        if not event_date or event_date >= now:
+            continue
+
+        # Fetch ALL contracts for this event
+        contracts = list(
+            self.db.collection("contracts").where("event_id", "==", event_id).stream()
         )
-        events_ref = self.db.collection("events").stream()
-        now = datetime.now()
 
-        for event_doc in events_ref:
-            event = event_doc.to_dict()
-            event_id = event_doc.id
-            event_name = event.get("event_name", "Untitled Event")
-            event_date_str = event.get("event_date", {}).get("date_value")
+        # Fetch ALL applications for this event
+        applications = list(
+            self.db.collection("applications")
+            .where("event_id", "==", event_id)
+            .stream()
+        )
 
-            event_date = self.safe_parse_date(event_date_str)
-            if not event_date or event_date >= now:
-                continue
-
-            # Fetch all contracts for this event
-            contracts = list(
-                self.db.collection("contracts")
-                .where("event_id", "==", event_id)
-                .stream()
+        # NEW LOGIC: Delete only if NO contracts AND NO applications
+        if contracts or applications:
+            print(
+                f"⏩ Skipping delete for event {event_id} — it has contracts or applications."
             )
+            continue
 
-            active_contracts = [
-                c
-                for c in contracts
-                if c.to_dict().get("status")
-                not in ["Cancelled", "Completed", "Approved", "Pending"]
-            ]
+        # If both empty → delete event
+        print(f"🗑 Deleting expired event {event_id} ({event_name})")
+        planner_id = event.get("user_id") or event.get("planner_id")
 
-            # Fetch all applications for this event
-            applications = list(
-                self.db.collection("applications")
-                .where("event_id", "==", event_id)
-                .stream()
-            )
+        if planner_id:
+            self.send_event_notification(planner_id, event_id, event_name, "planner")
 
-            active_applications = [
-                a
-                for a in applications
-                if a.to_dict().get("status") not in ["Approved", "Pending"]
-            ]
-
-            # Delete event if no active contracts AND no active applications
-            if not active_contracts and not active_applications:
-                print(f"🗑 Deleting expired event {event_id} ({event_name})")
-                planner_id = event.get("user_id") or event.get("planner_id")
-                if planner_id:
-                    self.send_event_notification(
-                        planner_id, event_id, event_name, "planner"
-                    )
-                self.db.collection("events").document(event_id).delete()
+        self.db.collection("events").document(event_id).delete()
 
     def auto_cancel_contracts(self):
         print(f"[{datetime.now()}] Checking for inactive or expired contracts...")
