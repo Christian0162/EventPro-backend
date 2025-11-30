@@ -30,11 +30,16 @@ class GeminiService:
             Here is the list of suppliers:
             {suppliers_text}
 
-            Based on reviews, ratings, and category match, suggest the top 3 most suitable
-            suppliers with a short explanation for each.
+            Instructions:
+            - Suggest the TOP 3 suppliers.
+            - Prioritize suppliers that have reviews and ratings.
+            - Still include suppliers with no reviews or ratings if necessary.
+            - For each supplier, give a short explanation (25-35 words) why they are suitable.
+            - Use the following format exactly:
 
-            the following format must be like this:
-            1: "Supplier name", Details and just say supplier profiles
+            1: <Supplier Name> – short explanation
+            2: <Supplier Name> – short explanation
+            3: <Supplier Name> – short explanation
             """.strip()
         response = self.model.generate_content(prompt)
         return response.text
